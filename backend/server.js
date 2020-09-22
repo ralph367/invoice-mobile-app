@@ -13,6 +13,15 @@ app.use(cors(corsOptions));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
+const invoiceRoutes = require("./routes/invoice-routes");
+app.use("/api/invoices", invoiceRoutes);
+
+const itemRoutes = require("./routes/item-routes");
+app.use("/api/items", itemRoutes);
+
+const customerRoutes = require("./routes/customer-routes");
+app.use("/api/customers", customerRoutes);
+
 db.sequelize.sync().then(() => {
     app.listen(PORT, () => {
         console.log(`listening at http://localhost:${PORT}`)

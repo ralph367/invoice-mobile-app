@@ -12,11 +12,14 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
     Invoice.associate = models => {
-        Invoice.hasMany(models.Item, {
-            onDelete: "cascade"
+        Invoice.belongsTo(models.Customer, {
+            foreignKey: {
+                allowNull: false
+            }
         });
-        Invoice.hasOne(models.Customer, {
-            onDelete: "cascade"
+        Invoice.belongsToMany(models.Item, { 
+            through: 'Invoice_Items',
+			foreignKey: 'invoiceId'
         });
     };
     return Invoice;

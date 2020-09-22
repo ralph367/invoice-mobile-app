@@ -16,11 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
     Customer.associate = models => {
-        Customer.belongsTo(models.Invoice, {
-            foreignKey: {
-                allowNull: false
-            }
+        Customer.hasMany(models.Invoice, {
+            onDelete: "cascade"
         });
+        
     };
     return Customer;
 }

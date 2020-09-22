@@ -12,10 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
     Item.associate = models => {
-        Item.belongsTo(models.Invoice, {
-            foreignKey: {
-                allowNull: false
-            }
+        Item.belongsToMany(models.Invoice, { 
+            through: 'Invoice_Items',
+			foreignKey: 'itemId' 
         });
     };
     return Item;
