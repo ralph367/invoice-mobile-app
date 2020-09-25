@@ -21,7 +21,7 @@ Install:
 
 Clone the front and backend repositories:
 - Open any terminal and change directory into the backend folder then use: `npm run dev`
-- Open another termninal and change directory into the frontend folder then use: `expo start`
+- Open another termninal and change directory into the frontend folder then use: `npm install && expo start`
 
 ## Documentation
 
