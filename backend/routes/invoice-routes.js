@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
+const nodemailer = require("nodemailer");
 
 router.post("/", (req, res) => {
     db.Invoice.create({
@@ -45,12 +46,53 @@ router.put("/:id", (req, res) => {
                     })
 
                 ).then(res.send("updated"))
-        );
+                .catch((e) => console.log(e))
+        ).catch((e) => console.log(e))
 })
 
 router.delete("/:id", (req, res) => {
     db.Invoice.destroy({ where: { id: req.params.id } })
         .then(res.send("deleted"));
+})
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: '',
+        pass: ''
+    }
+});
+
+router.post("/send", (req, res) => {
+    var price = '';
+    var email = '';
+    var name = '';
+    var items = [];
+    db.Invoice.findAll({ include: [db.Item, db.Customer], where: { id: req.body.id } })
+        .then(data => {
+            data.forEach((info) => {
+                email = info.Customer.address;
+                name = info.Customer.firstname;
+                price = info.price
+            });
+            data[0].Items.forEach((item, key) => {
+                items[key] = "Item name: " + item.name + " Item price: " + item.price
+            })
+        }).then(data => {
+            var mailOptions = {
+                from: 'victor_baines@hotmail.com',
+                to: email,
+                subject: "Invoice for M." + name,
+                text: 'Here is a list of your items ' +items + "\n Total price: " + price
+            };        
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            })
+        }).finally(console.log("Email Sent"))
 })
 
 module.exports = router
