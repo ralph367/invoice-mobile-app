@@ -17,4 +17,25 @@ router.get("/", (req, res) => {
     }).then(data => res.send(data));
 })
 
+router.get("/:id", (req, res) => {
+    db.Customer.findAll({where: {id :req.params.id}})
+    .then(data => res.send(data));
+})
+
+router.put("/:id", (req, res) => {
+    console.log(req.body.name)
+    db.Customer.update({
+        firstname: req.body.firstname,
+        secondname: req.body.secondname,
+        phone: req.body.phone,
+        address: req.body.address,
+    }, {where: {id :req.params.id}})
+    .then(data => res.send(data));
+})
+
+router.delete("/:id", (req, res) => {
+    db.Customer.destroy({where: {id :req.params.id}})
+    .then( res.send("deleted"));
+})
+
 module.exports = router

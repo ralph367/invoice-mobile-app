@@ -16,4 +16,24 @@ router.get("/", (req, res) => {
     }).then(data => res.send(data));
 })
 
+router.get("/:id", (req, res) => {
+    db.Item.findAll({where: {id :req.params.id}})
+    .then(data => res.send(data));
+})
+
+router.put("/:id", (req, res) => {
+    console.log(req.body.name)
+    db.Item.update({
+        name: req.body.name, 
+        description: req.body.description,
+        price: req.body.price
+    }, {where: {id :req.params.id}})
+    .then(data => res.send(data));
+})
+
+router.delete("/:id", (req, res) => {
+    db.Item.destroy({where: {id :req.params.id}})
+    .then( res.send("deleted"));
+})
+
 module.exports = router
